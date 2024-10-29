@@ -55,22 +55,11 @@ function Gameboard(){
         return firstTie || secondTie;
     }
 
-    function printGameboard(){
-        let message = "";
-        for(row of gameboard){
-            for(e of row){
-                message += e+" ";
-            }
-            message += "\n";
-        }
-        console.log(message);
-    }
-
     function getGameboard(){
         return gameboard;
     }
 
-    return {checkIfGbFull, checkRow, checkColumn, checkTies, printGameboard, mark, getGameboard};
+    return {checkIfGbFull, checkRow, checkColumn, checkTies, mark, getGameboard};
 }
 
 function Player(){
@@ -95,12 +84,11 @@ function GameController(){
 
     let activePlayer = player1;
 
-    function getAndMarkSymbol(){
+    function markSymbol(){
         gameboard.mark(activePlayer.symbol, lastMove.row, lastMove.column);
     }
 
     function checkForGameResult(){
-        console.log(lastMove);
         if(
             gameboard.checkColumn(lastMove.column,activePlayer.symbol) ||
             gameboard.checkRow(lastMove.row, activePlayer.symbol) ||
@@ -111,11 +99,6 @@ function GameController(){
             return "draw";
         else 
             return false;
-    }
-
-    function announceGameResult(result){
-        if(result === "draw")   console.log(result);
-        else    console.log('Congratulations '+result+' you win!');
     }
 
     function getActivePlayer(){
@@ -129,7 +112,7 @@ function GameController(){
     function playRound(row, column){
         lastMove.row = row;
         lastMove.column = column;
-        getAndMarkSymbol();
+        markSymbol();
         result = checkForGameResult();
         if(result){
             return result;
