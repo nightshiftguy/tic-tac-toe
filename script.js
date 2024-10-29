@@ -66,7 +66,11 @@ function Gameboard(){
         console.log(message);
     }
 
-    return {checkIfGbFull, checkRow, checkColumn, checkTies, printGameboard, mark};
+    function getGameboard(){
+        return gameboard;
+    }
+
+    return {checkIfGbFull, checkRow, checkColumn, checkTies, printGameboard, mark, getGameboard};
 }
 
 function Player(){
@@ -88,16 +92,12 @@ function GameController(){
     player2.symbol = 'O';
 
     let lastMove = {row: -1, column: -1};
-    let isGameUp = true;
 
     let activePlayer = player1;
 
     function getAndMarkSymbol(){
         let message;
         do{
-            alert(activePlayer.name+" mark "+activePlayer.symbol+" on gameboard");
-            lastMove.column = Number(prompt("x: "));
-            lastMove.row = Number(prompt("y: "));
             message =  gameboard.mark(activePlayer.symbol, lastMove.row, lastMove.column);
             gameboard.printGameboard();
         }
@@ -119,26 +119,71 @@ function GameController(){
     }
 
     function announceGameResult(result){
-        if(result === "draw")   console.log(draw);
-        else    console.log('Congratulations: '+activePlayer.name+' you win!');
+        if(result === "draw")   console.log(result);
+        else    console.log('Congratulations '+result+' you win!');
+    }
+
+    function getActivePlayer(){
+        return activePlayer;
     }
 
     function changeActivePlayer(){
         activePlayer = activePlayer === player1 ? player2 : player1;
     }
 
-    let gameResult;
-    while(isGameUp){
+    function playRound(row, column){
+        lastMove.row = row;
+        lastMove.column = column;
         getAndMarkSymbol();
         result = checkForGameResult();
         if(result){
-            announceGameResult(gameResult);
-            break;
+            return result;
         }
         changeActivePlayer();
     }
 
-    return {getAndMarkSymbol}
+    return {playRound, getGameboard: gameboard.getGameboard, getActivePlayer}
 }
 
-function uiController(){}
+function uiController(){
+    const game = GameController();
+    const boardDiv = document.querySelector('.board');
+    boardDiv.setAttribute("style","display:grid; grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr");
+
+    function updateScreen(){
+        boardDiv.textContent = "";
+        
+        let gameboard = game.getGameboard();
+        
+        gameboard.forEach((row, rowNumber )=> {
+            row.forEach((cell, columnNumber)=>{
+            const cellButton = document.createElement('button');
+            cellButton.setAttribute("class","cell");
+
+            cellButton.dataset.column = columnNumber;
+            cellButton.dataset.row = rowNumber;
+
+            if(cell)
+                cellButton.textContent = cell;
+            boardDiv.appendChild(cellButton);
+            });
+        });
+    }
+
+    function clickHandlerBoard(e) {
+        const selectedColumn = e.target.dataset.column;
+        const selectedRow = e.target.dataset.row;
+
+        if (!selectedColumn || !selectedRow) return;
+        
+        let gameResult = game.playRound(selectedRow, selectedColumn);
+        if(gameResult)
+            alert(gameResult);
+        updateScreen();
+    }
+    boardDiv.addEventListener("click", clickHandlerBoard);
+
+    updateScreen();
+}
+
+uiController();
