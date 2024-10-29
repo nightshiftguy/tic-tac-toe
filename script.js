@@ -96,12 +96,7 @@ function GameController(){
     let activePlayer = player1;
 
     function getAndMarkSymbol(){
-        let message;
-        do{
-            message =  gameboard.mark(activePlayer.symbol, lastMove.row, lastMove.column);
-            gameboard.printGameboard();
-        }
-        while(message === "error");
+        gameboard.mark(activePlayer.symbol, lastMove.row, lastMove.column);
     }
 
     function checkForGameResult(){
@@ -148,7 +143,6 @@ function GameController(){
 function uiController(){
     const game = GameController();
     const boardDiv = document.querySelector('.board');
-    boardDiv.setAttribute("style","display:grid; grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr");
 
     function updateScreen(){
         boardDiv.textContent = "";
@@ -163,12 +157,16 @@ function uiController(){
             cellButton.dataset.column = columnNumber;
             cellButton.dataset.row = rowNumber;
 
-            if(cell)
-                cellButton.textContent = cell;
+            if(cell){
+                cellButton.setAttribute("class","cell marked-"+cell.toString().toLowerCase());
+            }
+
             boardDiv.appendChild(cellButton);
             });
         });
     }
+
+    function displayGameResult(){}
 
     function clickHandlerBoard(e) {
         const selectedColumn = e.target.dataset.column;
@@ -177,9 +175,10 @@ function uiController(){
         if (!selectedColumn || !selectedRow) return;
         
         let gameResult = game.playRound(selectedRow, selectedColumn);
+        updateScreen();
+
         if(gameResult)
             alert(gameResult);
-        updateScreen();
     }
     boardDiv.addEventListener("click", clickHandlerBoard);
 

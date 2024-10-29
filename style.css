@@ -4,12 +4,62 @@ body{
     padding:0;
 }
 
-.board{
-    width:50%;
-    height: 100vh;
-    margin:0 auto;
+button{
+    border:none;
+    padding:0;
 }
 
-button{
-    min-height: 50px;
+button:hover{
+    background-color:rgb(207, 207, 207);
+}
+
+button:focus{
+    border:none;
+}
+
+.board{
+    --gap:10px;
+    --cell-min-size:50px;
+
+    --board-min-size:calc(
+        calc(var(--gap)*2) 
+        + calc(var(--cell-min-size)*3)
+        );
+
+    margin:0 auto;
+    width:20vw;
+    height:20vw;
+    gap:var(--gap);
+    display:grid; 
+    grid-template: repeat(3,minmax(var(--cell-min-size), 1fr)) / repeat(3,minmax(var(--cell-min-size), 1fr)); 
+    min-width:var(--board-min-size); 
+    min-height:var(--board-min-size);
+}
+
+.cell{
+    padding:20%;
+    border-radius:10%;
+}
+
+.cell.marked-x{
+    color:darkred;
+    background-color: lightpink;
+}
+
+.cell.marked-x:after{
+    content:url(/icons/x.svg);
+}
+
+.cell.marked-o{
+    color:darkgreen;
+    background-color: lightblue;
+}
+
+.cell.marked-o:after{
+    content:url(/icons/circle.svg);
+}
+
+svg{
+    height: 50%;
+    width:50%;
 }
