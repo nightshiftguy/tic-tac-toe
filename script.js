@@ -126,12 +126,20 @@ function GameController(){
 function uiController(){
     const game = GameController();
     const boardDiv = document.querySelector('.board');
+    const infoBar = document.querySelector('.info-bar');
+
+    //create dialog for first and second player
+    //create dialog for ending game
 
     function updateScreen(){
-        boardDiv.textContent = "";
+        boardDiv.textContent="";
+        infoBar.textContent="";
+        
+        const activePlayerScreen = document.createElement("p");
+        activePlayerScreen.textContent=game.getActivePlayer().name+"'s move ("+game.getActivePlayer().symbol+")";
+        infoBar.appendChild(activePlayerScreen);
         
         let gameboard = game.getGameboard();
-        
         gameboard.forEach((row, rowNumber )=> {
             row.forEach((cell, columnNumber)=>{
             const cellButton = document.createElement('button');
