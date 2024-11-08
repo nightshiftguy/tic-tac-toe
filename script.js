@@ -94,7 +94,7 @@ function GameController(){
             gameboard.checkRow(lastMove.row, activePlayer.symbol) ||
             gameboard.checkTies(activePlayer.symbol)
         )
-            return activePlayer.name;
+            return activePlayer;
         else if(gameboard.checkIfGbFull())
             return "draw";
         else 
@@ -124,6 +124,7 @@ function GameController(){
 }
 
 function uiController(){
+    const body = document.querySelector("body");
     const game = GameController();
     const boardDiv = document.querySelector('.board');
     const infoBar = document.querySelector('.info-bar');
@@ -157,7 +158,23 @@ function uiController(){
         });
     }
 
-    function displayGameResult(){}
+    function displayGameResult(gameResult){
+        const gameResultDialog = document.createElement("dialog");
+        gameResultDialog.setAttribute("class","end-game-dialog");
+        let message = "";
+        if(typeof(gameResult) === "object"){
+            message = gameResult.name+" ("+gameResult.symbol+") Wins the game!";
+        }
+        else if(gameResult="draw")
+            message = "game ended in draw";
+        gameResultDialog.textContent = message;
+        body.insertBefore(gameResultDialog,infoBar);
+        gameResultDialog.showModal();
+
+        gameResultDialog.addEventListener("click", ()=>{
+            gameResultDialog.close();
+        })
+    }
 
     function clickHandlerBoard(e) {
         const selectedColumn = e.target.dataset.column;
@@ -169,7 +186,7 @@ function uiController(){
         updateScreen();
 
         if(gameResult)
-            alert(gameResult);
+            displayGameResult(gameResult);
     }
     boardDiv.addEventListener("click", clickHandlerBoard);
 
