@@ -7,10 +7,9 @@ function Gameboard(){
     function mark(symbol, row, column){
         if(row>=0 && row<=2 && column>=0 && column<=2 && gameboard[row][column] === null){
             gameboard[row][column]=symbol;
-            return "added mark";
         }
         else    
-            return "error";
+            return "field occupied";
     }
 
     function checkIfGbFull(){
@@ -104,11 +103,11 @@ function GameController(){
     }
 
     function playRound(row, column){
-        gameboard.mark(activePlayer.symbol, row, column);
+        let result = gameboard.mark(activePlayer.symbol, row, column);
+        if(result === "field occupied")  return;
+
         result = checkForGameResult(row,column);
-        if(result){
-            return result;
-        }
+        if(result)  return result;
         changeActivePlayer();
     }
 
