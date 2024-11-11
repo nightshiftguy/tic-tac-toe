@@ -94,6 +94,12 @@ function GameController(){
         }
         player1.name=playerXname;
         player2.name=playerOname;
+        isGameActive=true;
+    }
+
+    function restartGame(){
+        isGameActive=true;
+        gameboard.reset();
     }
 
     function checkForGameResult(row, column){
@@ -126,11 +132,14 @@ function GameController(){
         if(result === "field occupied")  return;
 
         result = checkForGameResult(row,column);
-        if(result)  return result;
+        if(result){
+            isGameActive=false;
+            return result;
+        }
         changeActivePlayer();
     }
 
-    return {playRound, getGameboard: gameboard.getGameboard, resetGameboard: gameboard.reset, getActivePlayer, newGame}
+    return {playRound, getGameboard: gameboard.getGameboard, restartGame, getActivePlayer, newGame}
 }
 
 function uiController(){
