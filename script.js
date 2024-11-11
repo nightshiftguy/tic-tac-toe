@@ -149,9 +149,8 @@ function uiController(){
         });
     }
 
-    function displayGameResult(gameResult){
-        const gameResultDialog = document.createElement("dialog");
-        gameResultDialog.setAttribute("class","end-game-dialog");
+    function displayGameResultDialog(gameResult){
+        const gameResultDialog = document.querySelector(".game-result-dialog");
         let message = "";
         if(typeof(gameResult) === "object"){
             message = gameResult.name+" ("+gameResult.symbol+") Wins the game!";
@@ -177,7 +176,7 @@ function uiController(){
         updateScreen();
 
         if(gameResult)
-            displayGameResult(gameResult);
+            displayGameResultDialog(gameResult);
     }
     boardDiv.addEventListener("click", clickHandlerBoard);
 
