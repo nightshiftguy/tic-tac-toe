@@ -88,12 +88,13 @@ function GameController(){
     let activePlayer = player1;
 
     function startGame(playerXName, playerOName){
-        if(playerXName==="" || playerOName==="" || playerXname === playerOname){
+        activePlayer=player1;
+        if(playerXName==="" || playerOName==="" || playerXName === playerOName){
             console.log("new game error");
             return;
         }
-        player1.name=playerXname;
-        player2.name=playerOname;
+        player1.name=playerXName;
+        player2.name=playerOName;
         isGameActive=true;
     }
 
@@ -117,7 +118,6 @@ function GameController(){
     }
 
     function getActivePlayer(){
-        if(!isGameActive)   return;
         return activePlayer;
     }
 
@@ -148,35 +148,6 @@ function uiController(){
     const boardDiv = document.querySelector('.board');
     const infoBar = document.querySelector('.info-bar');
 
-    (function displayGetUsernamesDialog(){
-        let username1, username2;
-        const dialog = document.querySelector(".get-usernames-dialog");
-        const confirmBtn = dialog.querySelector(".confirmBtn");
-        const userNameInput1 = dialog.querySelector("#username-1");
-        const userNameInput2 = dialog.querySelector("#username-2");    
-        const errorMsg = document.querySelector(".dialog-error-msg");
-        errorMsg.setAttribute("style", "display:none;");
-
-        confirmBtn.addEventListener("click", (e)=>{
-            e.preventDefault();
-            username1 = userNameInput1.value;
-            username2 = userNameInput2.value;
-            if(username1==="" || username2===""){
-                errorMsg.textContent="username should be minimum 1 character long";
-                errorMsg.setAttribute("style", "display:block;");
-            }
-            else if(username1===username2){
-                errorMsg.textContent="usernames cannot be the same";
-                errorMsg.setAttribute("style", "display:block;");
-            }
-            else{
-                dialog.close();
-            }
-        });
-
-        dialog.showModal();
-    })();
-
     function updateScreen(){
         boardDiv.textContent="";
         infoBar.textContent="";
@@ -203,6 +174,37 @@ function uiController(){
         });
     }
 
+    (function displayGetUsernamesDialog(){
+        const dialog = document.querySelector(".get-usernames-dialog");
+        const confirmBtn = dialog.querySelector(".confirmBtn");
+        const userNameInput1 = dialog.querySelector("#username-1");
+        const userNameInput2 = dialog.querySelector("#username-2");    
+        const errorMsg = document.querySelector(".dialog-error-msg");
+        errorMsg.setAttribute("style", "display:none;");
+
+        confirmBtn.addEventListener("click", (e)=>{
+            e.preventDefault();
+            let username1 = userNameInput1.value;
+            let username2 = userNameInput2.value;
+            if(username1==="" || username2===""){
+                errorMsg.textContent="username should be minimum 1 character long";
+                errorMsg.setAttribute("style", "display:block;");
+            }
+            else if(username1===username2){
+                errorMsg.textContent="usernames cannot be the same";
+                errorMsg.setAttribute("style", "display:block;");
+            }
+            else{
+                dialog.close();
+                console.log(username1);
+                game.startGame(username1,username2);
+                updateScreen();
+            }
+        });
+
+        dialog.showModal();
+    })();
+
     function displayGameResultDialog(gameResult){
         const gameResultDialog = document.querySelector(".game-result-dialog");
         let message = "";
@@ -227,14 +229,13 @@ function uiController(){
         if (!selectedColumn || !selectedRow) return;
         
         let gameResult = game.playRound(selectedRow, selectedColumn);
+        
         updateScreen();
-
+        
         if(gameResult)
             displayGameResultDialog(gameResult);
     }
     boardDiv.addEventListener("click", clickHandlerBoard);
-
-    updateScreen();
 }
 
 uiController();
