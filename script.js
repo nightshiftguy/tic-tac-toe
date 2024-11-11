@@ -196,7 +196,6 @@ function uiController(){
             }
             else{
                 dialog.close();
-                console.log(username1);
                 game.startGame(username1,username2);
                 updateScreen();
             }
