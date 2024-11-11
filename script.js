@@ -87,7 +87,7 @@ function GameController(){
 
     let activePlayer = player1;
 
-    function newGame(playerXName, playerOName){
+    function startGame(playerXName, playerOName){
         if(playerXName==="" || playerOName==="" || playerXname === playerOname){
             console.log("new game error");
             return;
@@ -139,7 +139,7 @@ function GameController(){
         changeActivePlayer();
     }
 
-    return {playRound, getGameboard: gameboard.getGameboard, restartGame, getActivePlayer, newGame}
+    return {playRound, getGameboard: gameboard.getGameboard, restartGame, getActivePlayer, startGame}
 }
 
 function uiController(){
@@ -171,7 +171,6 @@ function uiController(){
             }
             else{
                 dialog.close();
-                //dialog should start game
             }
         });
 
