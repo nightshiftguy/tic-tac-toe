@@ -54,11 +54,18 @@ function Gameboard(){
         return firstTie || secondTie;
     }
 
+    function reset(){
+        gameboard = 
+        [[null, null, null],
+        [null, null, null],
+        [null, null, null]];
+    }
+
     function getGameboard(){
         return gameboard;
     }
 
-    return {checkIfGbFull, checkRow, checkColumn, checkTies, mark, getGameboard};
+    return {checkIfGbFull, checkRow, checkColumn, checkTies, mark, getGameboard, reset};
 }
 
 function Player(){
@@ -70,18 +77,27 @@ function Player(){
 
 function GameController(){
     const gameboard = Gameboard();
+    let isGameActive = false;
 
     let player1 = Player();
-    player1.name = 'firstPlayer';
     player1.symbol = 'X';
 
     let player2 = Player();
-    player2.name = 'secondPlayer';
     player2.symbol = 'O';
 
     let activePlayer = player1;
 
+    function newGame(playerXName, playerOName){
+        if(playerXName==="" || playerOName==="" || playerXname === playerOname){
+            console.log("new game error");
+            return;
+        }
+        player1.name=playerXname;
+        player2.name=playerOname;
+    }
+
     function checkForGameResult(row, column){
+        if(!isGameActive)   return;
         if(
             gameboard.checkColumn(column, activePlayer.symbol) ||
             gameboard.checkRow(row, activePlayer.symbol) ||
@@ -95,14 +111,17 @@ function GameController(){
     }
 
     function getActivePlayer(){
+        if(!isGameActive)   return;
         return activePlayer;
     }
 
     function changeActivePlayer(){
+        if(!isGameActive)   return;
         activePlayer = activePlayer === player1 ? player2 : player1;
     }
 
     function playRound(row, column){
+        if(!isGameActive)   return;
         let result = gameboard.mark(activePlayer.symbol, row, column);
         if(result === "field occupied")  return;
 
@@ -111,7 +130,7 @@ function GameController(){
         changeActivePlayer();
     }
 
-    return {playRound, getGameboard: gameboard.getGameboard, getActivePlayer}
+    return {playRound, getGameboard: gameboard.getGameboard, resetGameboard: gameboard.reset, getActivePlayer, newGame}
 }
 
 function uiController(){
@@ -120,8 +139,35 @@ function uiController(){
     const boardDiv = document.querySelector('.board');
     const infoBar = document.querySelector('.info-bar');
 
-    //create dialog for first and second player
-    //create dialog for ending game
+    (function displayGetUsernamesDialog(){
+        let username1, username2;
+        const dialog = document.querySelector(".get-usernames-dialog");
+        const confirmBtn = dialog.querySelector(".confirmBtn");
+        const userNameInput1 = dialog.querySelector("#username-1");
+        const userNameInput2 = dialog.querySelector("#username-2");    
+        const errorMsg = document.querySelector(".dialog-error-msg");
+        errorMsg.setAttribute("style", "display:none;");
+
+        confirmBtn.addEventListener("click", (e)=>{
+            e.preventDefault();
+            username1 = userNameInput1.value;
+            username2 = userNameInput2.value;
+            if(username1==="" || username2===""){
+                errorMsg.textContent="username should be minimum 1 character long";
+                errorMsg.setAttribute("style", "display:block;");
+            }
+            else if(username1===username2){
+                errorMsg.textContent="usernames cannot be the same";
+                errorMsg.setAttribute("style", "display:block;");
+            }
+            else{
+                dialog.close();
+                //dialog should start game
+            }
+        });
+
+        dialog.showModal();
+    })();
 
     function updateScreen(){
         boardDiv.textContent="";

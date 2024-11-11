@@ -9,16 +9,20 @@
 </head>
 <body>
 
-    <dialog class="getusernames-dialog">
-        <form type="dialog">
-            <input type="text">
-            <input type="text">
-            <button type="submit">CONFIRM</button>
+    <dialog class="get-usernames-dialog">
+        <h3>Enter players' nicknames</h3>
+        <form>
+            <label for="username-1">First player username:</label>
+            <input type="text" id="username-1" required autofocus>
+            <label for="username-2">Second player username:</label>
+            <input type="text" id="username-2" required>
+            <button class="confirmBtn" type="submit">CONFIRM</button>
+            <p class="dialog-error-msg" style="display:none;"></p>
         </form>
     </dialog>
 
     <dialog class="game-result-dialog"></dialog>
-    
+
     <div class="info-bar"></div>
     <div class="board"></div>
 </body>
