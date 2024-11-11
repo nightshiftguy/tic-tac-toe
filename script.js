@@ -80,18 +80,12 @@ function GameController(){
     player2.name = 'secondPlayer';
     player2.symbol = 'O';
 
-    let lastMove = {row: -1, column: -1};
-
     let activePlayer = player1;
 
-    function markSymbol(){
-        gameboard.mark(activePlayer.symbol, lastMove.row, lastMove.column);
-    }
-
-    function checkForGameResult(){
+    function checkForGameResult(row, column){
         if(
-            gameboard.checkColumn(lastMove.column,activePlayer.symbol) ||
-            gameboard.checkRow(lastMove.row, activePlayer.symbol) ||
+            gameboard.checkColumn(column, activePlayer.symbol) ||
+            gameboard.checkRow(row, activePlayer.symbol) ||
             gameboard.checkTies(activePlayer.symbol)
         )
             return activePlayer;
@@ -110,10 +104,8 @@ function GameController(){
     }
 
     function playRound(row, column){
-        lastMove.row = row;
-        lastMove.column = column;
-        markSymbol();
-        result = checkForGameResult();
+        gameboard.mark(activePlayer.symbol, row, column);
+        result = checkForGameResult(row,column);
         if(result){
             return result;
         }
