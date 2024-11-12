@@ -148,6 +148,8 @@ function uiController(){
     const boardDiv = document.querySelector('.board');
     const infoBar = document.querySelector('.info-bar');
 
+    //add restart game button after finishing game
+
     function updateScreen(){
         boardDiv.textContent="";
         infoBar.textContent="";
@@ -221,6 +223,18 @@ function uiController(){
         })
     }
 
+    function createGameRestartBtn(){
+        infoBar.textContent="";
+        const btn = document.createElement("button");
+        btn.textContent="NEW GAME";
+        infoBar.appendChild(btn);
+
+        btn.addEventListener("click", (event)=>{
+            game.restartGame();
+            updateScreen();
+        });
+    }
+
     function clickHandlerBoard(e) {
         const selectedColumn = e.target.dataset.column;
         const selectedRow = e.target.dataset.row;
@@ -231,8 +245,10 @@ function uiController(){
         
         updateScreen();
         
-        if(gameResult)
+        if(gameResult){
             displayGameResultDialog(gameResult);
+            createGameRestartBtn();
+        }
     }
     boardDiv.addEventListener("click", clickHandlerBoard);
 }
