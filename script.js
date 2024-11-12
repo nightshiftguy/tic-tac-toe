@@ -153,14 +153,14 @@ function uiController(){
 
     function updateScreen(){
         boardDiv.textContent="";
-        infoBar.textContent="";
         
-        
-        if(!game.getActivePlayer())  return;
-        const activePlayerScreen = document.createElement("p");
-        activePlayerScreen.textContent=game.getActivePlayer().name+"'s move ("+game.getActivePlayer().symbol+")";
-        infoBar.appendChild(activePlayerScreen);
-        
+        if(game.getActivePlayer()){
+            infoBar.textContent="";
+            const activePlayerScreen = document.createElement("p");
+            activePlayerScreen.textContent=game.getActivePlayer().name+"'s move ("+game.getActivePlayer().symbol+")";
+            infoBar.appendChild(activePlayerScreen);
+        }
+
         let gameboard = game.getGameboard();
         gameboard.forEach((row, rowNumber )=> {
             row.forEach((cell, columnNumber)=>{
