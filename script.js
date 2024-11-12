@@ -118,6 +118,7 @@ function GameController(){
     }
 
     function getActivePlayer(){
+        if(!isGameActive)   return;
         return activePlayer;
     }
 
@@ -154,6 +155,8 @@ function uiController(){
         boardDiv.textContent="";
         infoBar.textContent="";
         
+        
+        if(!game.getActivePlayer())  return;
         const activePlayerScreen = document.createElement("p");
         activePlayerScreen.textContent=game.getActivePlayer().name+"'s move ("+game.getActivePlayer().symbol+")";
         infoBar.appendChild(activePlayerScreen);
