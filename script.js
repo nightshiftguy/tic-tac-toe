@@ -143,13 +143,11 @@ function GameController(){
     return {playRound, getGameboard: gameboard.getGameboard, restartGame, getActivePlayer, startGame}
 }
 
-function uiController(){
+(function uiController(){
     const body = document.querySelector("body");
     const game = GameController();
     const boardDiv = document.querySelector('.board');
     const infoBar = document.querySelector('.info-bar');
-
-    //add restart game button after finishing game
 
     function updateScreen(){
         boardDiv.textContent="";
@@ -179,7 +177,7 @@ function uiController(){
         });
     }
 
-    (function displayGetUsernamesDialog(){
+    function displayGetUsernamesDialog(){
         const dialog = document.querySelector(".get-usernames-dialog");
         const confirmBtn = dialog.querySelector(".confirmBtn");
         const userNameInput1 = dialog.querySelector("#username-1");
@@ -216,7 +214,7 @@ function uiController(){
         });
 
         dialog.showModal();
-    })();
+    }
 
     function displayGameResultDialog(gameResult){
         const gameResultDialog = document.querySelector(".game-result-dialog");
@@ -224,8 +222,11 @@ function uiController(){
         if(typeof(gameResult) === "object"){
             message = gameResult.name+" ("+gameResult.symbol+") Wins the game!";
         }
-        else if(gameResult="draw")
+        else if(gameResult==="draw")
             message = "game ended in draw";
+        else
+            return;
+
         gameResultDialog.textContent = message;
         body.insertBefore(gameResultDialog,infoBar);
         gameResultDialog.showModal();
@@ -263,6 +264,7 @@ function uiController(){
         }
     }
     boardDiv.addEventListener("click", clickHandlerBoard);
-}
 
-uiController();
+    updateScreen();
+    displayGetUsernamesDialog();
+})();
