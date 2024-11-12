@@ -200,10 +200,19 @@ function uiController(){
                 errorMsg.setAttribute("style", "display:block;");
             }
             else{
-                dialog.close();
+                dialog.close(true);
                 game.startGame(username1,username2);
                 updateScreen();
             }
+        });
+
+        dialog.addEventListener("keydown", (event) => {
+            if(event.key === "Escape")
+              event.preventDefault();
+        });
+
+        dialog.addEventListener("cancel",(event)=>{
+            event.preventDefault();
         });
 
         dialog.showModal();
