@@ -59,7 +59,7 @@ button:focus{
 }
 
 .cell.marked-x:after{
-    content:url(/icons/x.svg);
+    content:url(./icons/x.svg);
 }
 
 .cell.marked-o{
@@ -68,7 +68,7 @@ button:focus{
 }
 
 .cell.marked-o:after{
-    content:url(/icons/circle.svg);
+    content:url(./icons/circle.svg);
 }
 
 svg{
